@@ -1,17 +1,23 @@
+
 from tkinter import *
 from tkinter import filedialog
 from tkinter import font
 from tkinter import simpledialog
+
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 root=Tk()
 root.title("Notepad")
 #root.iconbitmap("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_M6SzMy82SMHPAcWvpDIZoTiPKYXvhxnswA&usqp=CAU")
 root.geometry("1200x660")
 
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 cu_file_path=""
 global selected
 selected=False
 
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 #File Menu
 
@@ -24,7 +30,6 @@ def new_file():
 # def new_win():
 #     root.title("New Window")
     
-
 #Open
 def open_file():
     # save_file()
@@ -33,7 +38,7 @@ def open_file():
     text_file = filedialog.askopenfilename(initialdir="C:/Github/", title="Open File", filetype=(("Text File","*.txt"),("All Files","*.*")))
     name=text_file
     #rename file address
-    name=name.replace("C:/Github/","") 
+    name=name.replace("C:/Github/","")
     root.title(f'{name}')
     #open file 
     with open(text_file, "r") as file:
@@ -42,7 +47,6 @@ def open_file():
         text_b.insert('end', stuff)
 
 
-            
 #save the updates
 def save_file():
     global cu_file_path
@@ -50,7 +54,6 @@ def save_file():
         # Open file for writing
         with open(cu_file_path, "w") as file:
             file.write(text_b.get("1.0", "end"))
-    
 
 #save as
 def save_as():
@@ -58,14 +61,57 @@ def save_as():
     file_path = filedialog.asksaveasfilename(defaultextension=".txt", initialdir="C:/Github/", title="Save As",filetype=(("Text File", "*.txt"), ("All Files", "*.*")))
     if file_path:
         cu_file_path= file_path
-        name = file_path.replace("C:/Github/", "") 
+        name = file_path.replace("C:/Github/", "")
         root.title(f'{name}')
         # open file for writing
         with open(file_path, "w") as file:
             file.write(text_b.get("1.0", "end"))
     
 
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+#home isnt complete this is incomplete
+
+#italics
+def i_text():
+    pass
+
+#bold
+def b_text():
+    pass
+
+#underline
+def u_text():
+    pass
+
+
+#font size
+def f_size():
+    pass
+
+#font family
+def f_family():
+    pass
+
+
+#Right align 
+def right_a():
+    pass
+
+#left
+def left_a():
+    pass
+
+#center
+def center_a():
+    pass
+
+#Justify
+def justify_a():
+    pass
+
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 #edit menu
 
@@ -88,6 +134,12 @@ def paste_text():
         position = text_b.index(INSERT)
         text_b.insert(position, selected)
 
+#delete
+def delete_text():
+    global selected
+    if text_b.selection_get():
+        text_b.delete("sel.first", "sel.last")
+
 
 #select all
 def select_All():
@@ -106,16 +158,9 @@ def find_text():
             text_b.see("insert")
 
 
-#delete
-def delete_text():
-    global selected
-    if text_b.selection_get():
-        text_b.delete("sel.first", "sel.last")
-            
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-# def i_word():
-#     italics_f= font.Font(text_b, text_b.)
     
 
 #main frame
@@ -130,11 +175,25 @@ scroll.pack(side=RIGHT,fill=Y)
 menu_bar = Menu(root)   
 root.config(menu=menu_bar)
 
+#text box
+text_b= Text(m_frame, width=140, height=37, font=("Ariel", 11 ), selectbackground="navy blue", selectforeground="white", undo = True , yscrollcommand=scroll.set)
+text_b.pack()
+
+
+#adding scroll bar
+scroll.config(command=text_b.yview)
+
+
+
+
+
+
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 #file menu
 file_menu = Menu(menu_bar, tearoff=False) #tearoff is to seperate buttons from menu bar  
 menu_bar.add_cascade(label="File", menu=file_menu)
 file_menu.add_command(label="New File", command=new_file)
-# file_menu.add_command(label="New Window", command= new_win)
 file_menu.add_command(label="Open", command=open_file)
 file_menu.add_separator()
 file_menu.add_command(label="Save As", command=save_as)
@@ -145,14 +204,28 @@ file_menu.add_command(label="Exit", command=root.quit)
 
 
 
+#home menu
+home_menu = Menu(menu_bar)  
+menu_bar.add_cascade(label="Home", menu=home_menu)
+home_menu.add_command(label="Bold",command=b_text)
+home_menu.add_command(label="Italics",command=i_text)
+home_menu.add_command(label="Underline",command=u_text)
+home_menu.add_separator()
+home_menu.add_command(label="Font Family",command=f_family)
+home_menu.add_command(label="Font Size",command=f_size)
+home_menu.add_separator()
+home_menu.add_command(label="Left Align",command=left_a)
+home_menu.add_command(label="Right Align",command=right_a)
+home_menu.add_command(label="Center Align",command=center_a)
+home_menu.add_command(label="Justify",command=justify_a)
+
+
+
 
 #status bar
 #status_bar = Label(root, text="")
 #status.pack(fill=X, side=BOTTOM, ipady=5)
 
-#text box
-text_b= Text(m_frame, width=140, height=37, font=("Ariel", 11 ), selectbackground="navy blue", selectforeground="white", undo = True , yscrollcommand=scroll.set)
-text_b.pack()
 
 
 #edit menu
@@ -169,7 +242,13 @@ edit_menu.add_separator()
 edit_menu.add_command(label="Find",command=lambda:find_text())
 edit_menu.add_command(label="Select All", command=select_All)
 
-#adding scroll bar
-scroll.config(command=text_b.yview)
+
+
+
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 root.mainloop()
+
+
+
+
