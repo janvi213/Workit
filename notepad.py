@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import filedialog
 from tkinter import font
+from tkinter import simpledialog
 
 root=Tk()
 root.title("Notepad")
@@ -8,6 +9,11 @@ root.title("Notepad")
 root.geometry("1200x660")
 
 cu_file_path=""
+global selected
+selected=False
+
+
+#File Menu
 
 #New menu
 def new_file():
@@ -34,9 +40,10 @@ def open_file():
         stuff = file.read()
         # add file to text box
         text_b.insert('end', stuff)
-    return
-        
 
+
+            
+#save the updates
 def save_file():
     global cu_file_path
     if cu_file_path:
@@ -57,10 +64,58 @@ def save_as():
         with open(file_path, "w") as file:
             file.write(text_b.get("1.0", "end"))
     
-        
 
 
 
+#edit menu
+
+#cut    
+def cut_text():
+    global selected
+    if text_b.selection_get():
+        selected = text_b.selection_get() 
+        text_b.delete("sel.first", "sel.last")
+
+#copy
+def copy_text():
+    global selected
+    if text_b.selection_get():
+        selected = text_b.selection_get()
+
+#paste
+def paste_text():
+    if selected:
+        position = text_b.index(INSERT)
+        text_b.insert(position, selected)
+
+
+#select all
+def select_All():
+    text_b.tag_add("sel","1.0", "end")
+
+#find
+def find_text():
+    search_text = simpledialog.askstring("Find", "Enter text to find:")
+    if search_text:
+        start_pos = text_b.search(search_text, "1.0", stopindex="end", nocase=True)
+        if start_pos:
+            end_pos = f"{start_pos}+{len(search_text)}c"
+            text_b.tag_remove("sel", "1.0", "end")
+            text_b.tag_add("sel", start_pos, end_pos)
+            text_b.mark_set("insert", start_pos)
+            text_b.see("insert")
+
+
+#delete
+def delete_text():
+    global selected
+    if text_b.selection_get():
+        text_b.delete("sel.first", "sel.last")
+            
+
+
+# def i_word():
+#     italics_f= font.Font(text_b, text_b.)
     
 
 #main frame
@@ -88,19 +143,7 @@ file_menu.add_separator()
 file_menu.add_command(label="Exit", command=root.quit)
 
 
-#edit menu
-edit_menu = Menu(menu_bar, tearoff=False)  
-menu_bar.add_cascade(label="Edit", menu=file_menu)
-edit_menu.add_command(label="Undo")
-edit_menu.add_command(label="Redo")
-edit_menu.add_separator()
-edit_menu.add_command(label="Cut")
-edit_menu.add_command(label="Copy")
-edit_menu.add_command(label="Paste")
-edit_menu.add_command(label="Delete")
-edit_menu.add_separator()
-edit_menu.add_command(label="Find")
-edit_menu.add_command(label="Select All")
+
 
 
 #status bar
@@ -110,6 +153,21 @@ edit_menu.add_command(label="Select All")
 #text box
 text_b= Text(m_frame, width=140, height=37, font=("Ariel", 11 ), selectbackground="navy blue", selectforeground="white", undo = True , yscrollcommand=scroll.set)
 text_b.pack()
+
+
+#edit menu
+edit_menu = Menu(menu_bar, tearoff=False)  
+menu_bar.add_cascade(label="Edit", menu=edit_menu)
+edit_menu.add_command(label="Undo", command=text_b.edit_undo)
+edit_menu.add_command(label="Redo", command=text_b.edit_redo)
+edit_menu.add_separator()
+edit_menu.add_command(label="Cut",command=lambda:cut_text())
+edit_menu.add_command(label="Copy",command=lambda:copy_text())
+edit_menu.add_command(label="Paste",command=lambda:paste_text())
+edit_menu.add_command(label="Delete",command=lambda:delete_text())
+edit_menu.add_separator()
+edit_menu.add_command(label="Find",command=lambda:find_text())
+edit_menu.add_command(label="Select All", command=select_All)
 
 #adding scroll bar
 scroll.config(command=text_b.yview)
