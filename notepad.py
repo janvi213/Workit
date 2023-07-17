@@ -30,10 +30,10 @@ def open_file():
     # save_file()
     text_b.delete("1.0",END) #clear text box
     #open dialog box
-    text_file = filedialog.askopenfilename(initialdir="C:/Users/91956/", title="Open File", filetype=(("Text File","*.txt"),("All Files","*.*")))
+    text_file = filedialog.askopenfilename(initialdir="C:/Github/", title="Open File", filetype=(("Text File","*.txt"),("All Files","*.*")))
     name=text_file
     #rename file address
-    name=name.replace("C:/Github","") 
+    name=name.replace("C:/Github/","") 
     root.title(f'{name}')
     #open file 
     with open(text_file, "r") as file:
@@ -55,10 +55,10 @@ def save_file():
 #save as
 def save_as():
     global cu_file_path
-    file_path = filedialog.asksaveasfilename(defaultextension=".txt", initialdir="C:/Github", title="Save As",filetype=(("Text File", "*.txt"), ("All Files", "*.*")))
+    file_path = filedialog.asksaveasfilename(defaultextension=".txt", initialdir="C:/Github/", title="Save As",filetype=(("Text File", "*.txt"), ("All Files", "*.*")))
     if file_path:
         cu_file_path= file_path
-        name = file_path.replace("C:/Github", "") 
+        name = file_path.replace("C:/Github/", "") 
         root.title(f'{name}')
         # open file for writing
         with open(file_path, "w") as file:
